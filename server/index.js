@@ -7,7 +7,7 @@ import multer from "multer";
 import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
-import { fileURLToPath, fireURLToPath } from "url";
+import { fileURLToPath } from "url";
 
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
@@ -33,3 +33,17 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage });
+
+/* MONGOOSE SETUP */
+const PORT = process.env.PORT || 6001;
+mongoose
+  .connect(process.env.MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server Port: ${PORT}`);
+    });
+  })
+  .catch((e) => console.log(`${e} did not connect`));
